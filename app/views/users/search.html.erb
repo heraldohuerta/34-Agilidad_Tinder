@@ -1,0 +1,100 @@
+
+
+<div class='container text-center'>
+  <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete %>
+        <p class="text-white"> <%= current_user.id %> / <%= current_user.email %></p>
+
+        <h1 class="text-white">Selecciona Tu Preferencia</h1>
+        <% if @matches == "true" %>
+        <button data-modal-trigger="trigger-demo" class="btn btn-primary btn-lg btn-block">
+        	  TIENE UN MATCH
+        </button>
+        <br>
+        <% end %>
+          <div>
+            <%= image_tag @user.url, style:'border-radius: 25px;' %>
+          <p class="text-white"><%= @user.id %> <%= @user.email %></p>
+          </div>
+
+          <div>
+            <%= link_to 'LIKE',    interactions_path(like: true, user_two_id: @user), method: :post, class: 'btn btn-info btn-circle btn-xl' %>
+            <%= link_to 'DISLIKE', interactions_path(like: false, user_two_id: @user), method: :post, class: 'btn btn-warning btn-circle btn-xl' %>
+          </div>
+  </div>
+<br>
+<div class="container text-center" style="display:flex" >
+  <% @unicos.each do |id| %>
+      <div class="card m-2 text-center" style="padding-top:30px;margin-top:20px; background-color:black">
+        <%= link_to image_tag(@users.find(id).url.thumb) ,  interactions_path(like: true, user_two_id: id), method: :post,class:"card-img-top"  %>
+        <div class="card-body">
+          <h5 class="card-title text-white"><%=  @users.find(id).email %></h5>
+          <p >Te a Seleccionado: <%= @count[id] %></p>
+          <div class="card-body">
+          <p class="card-text"><%= @users.find(id).bio %></p>
+        </div>
+          <%= link_to 'LIKE',    interactions_path(like: true, user_two_id: id), method: :post, class: 'btn btn-info  ' %>
+          <%= link_to 'DISLIKE', interactions_path(like: false, user_two_id: id), method: :post, class: 'btn btn-warning' %>
+<!--
+
+          <a href="#" class="btn btn-primary">Aceptar</a>
+          <a href="#" class="btn btn-primary">Rechazar</a> -->
+        </div>
+      </div>
+    <% end %>
+    </div>
+</div>
+
+
+
+
+<div data-modal="trigger-demo" class="modal">
+	  <article class="content-wrapper">
+	    <button class="close"></button>
+	    <header class="modal-header">
+	      <h2><%= @user_match_like.email %></h2>
+	    </header>
+	    <div class="Card">
+	      <p><%= @user_match_like.bio %></p>
+        <p><%= image_tag(@user_match_like.url.thumb)  %></p>
+	    </div>
+	    <footer class="modal-footer">
+	      <button>Okey</button>
+	      <button>Cancel</button>
+	    </footer>
+	  </article>
+	</div>
+
+
+  <script>
+  const buttons = document.querySelectorAll(`button[data-modal-trigger]`);
+
+  for(let button of buttons) {
+    modalEvent(button);
+}
+
+function modalEvent(button) {
+  button.addEventListener('click', () => {
+    const trigger = button.getAttribute('data-modal-trigger');
+    const modal = document.querySelector(`[data-modal=${trigger}]`);
+    const contentWrapper = modal.querySelector('.content-wrapper');
+    const close = modal.querySelector('.close');
+
+    close.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', () => modal.classList.remove('open'));
+    contentWrapper.addEventListener('click', (e) => e.stopPropagation());
+
+    modal.classList.toggle('open');
+  });
+}
+
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46156385-1', 'cssscript.com');
+  ga('send', 'pageview');
+
+</script>
